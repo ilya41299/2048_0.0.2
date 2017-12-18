@@ -4,223 +4,321 @@
 
 using namespace std;
 
+void input_mas(unsigned int  mas[4][4]) {
+
+	for (int k = 0; k < 3;) {
+		unsigned int i = rand() % 4;
+		unsigned int j = rand() % 4;
+		unsigned int r = rand() % 11;
+		if (mas[i][j] == 0) {
+			if (r < 10) {
+				mas[i][j] = 2;
+				k++;
+			}
+			else
+			mas[i][j] = 4;
+			k++;
+		}
+	}
+}
+void dobavlenie_chisla(unsigned int  mas[4][4]) {
+	int k = 0;
+	while (k != 1) {
+		unsigned int i = rand() % 4;
+		unsigned int j = rand() % 4;
+		unsigned int r = rand() % 11;
+		if (mas[i][j] == 0) {
+			if (r < 10) {
+				mas[i][j] = 2;
+				k = 1;
+			}
+			else
+				mas[i][j] = 4;
+			k = 1;
+		}
+	}
+}
+void output_mas(unsigned int mas[4][4], unsigned int score) {
+	cout << endl;
+	for (unsigned int i = 0; i<4; ++i) {
+		for (unsigned int j = 0; j<4; ++j) {
+			if (mas[i][j] == 0) {
+				cout << '*' << ' ';
+			}
+			else {
+				cout << mas[i][j] << " ";
+			}
+		}
+		cout << endl;
+	}
+	cout << endl;
+	cout << "Score: " << score << endl;
+}
+
+bool sdvig_vniz(unsigned int mas[4][4], unsigned int &score) {
+	unsigned int sdvig=0;
+	for (unsigned int j = 0; j < 4; j++) {
+		for (unsigned int i = 3; i > 0; i--) {
+			if (mas[i][j] == 0) {
+				for (int k = i - 1; k >= 0; k--) {
+					if (mas[k][j] != 0) {
+						mas[i][j] = mas[k][j];
+						mas[k][j] = 0;
+						sdvig++;
+						break;
+					}
+				}
+			}
+		}
+	}
+	for (unsigned int j = 0; j < 4; j++) {
+		for (unsigned int i = 3; i > 0; i--) {
+			if (mas[i][j] == mas[i - 1][j] && mas[i][j]!=0) {
+				score += mas[i][j];
+				mas[i][j] *= 2;
+				mas[i - 1][j] = 0;
+				sdvig++;
+			}
+		}
+	}
+	if (sdvig == 0) {
+		return false;
+	}
+	for (unsigned int j = 0; j < 4; j++) {
+		for (unsigned int i = 3; i > 0; i--) {
+			if (mas[i][j] == 0) {
+				for (int k = i - 1; k >= 0; k--) {
+					if (mas[k][j] != 0) {
+						mas[i][j] = mas[k][j];
+						mas[k][j] = 0;
+						break;
+					}
+				}
+			}
+		}
+	}
+	return true;
+}
+
+	
+
+
+bool sdvig_vverh(unsigned int mas[4][4], unsigned int &score) {
+	unsigned int sdvig = 0; 
+	for (unsigned int j = 0; j < 4; j++) {
+		for (unsigned int i = 0; i < 4; i++) {
+			if (mas[i][j] == 0) {
+				for (int k = i + 1; k < 4; k++) {
+					if (mas[k][j] != 0) {
+						mas[i][j] = mas[k][j];
+						mas[k][j] = 0;
+						sdvig++;
+						break;
+					}
+				}
+			}
+		}
+	}
+	for (unsigned int j = 0; j<4; j++) {
+		for (unsigned int i = 0; i<4; i++) {
+			if (mas[i][j] == mas[i + 1][j] && mas[i][j] != 0) {
+				score += mas[i][j];
+				mas[i][j] *= 2;
+				mas[i + 1][j] = 0;
+				sdvig++;
+			}
+		}
+	}
+	if (sdvig == 0) {
+		return false;
+	}
+	for (unsigned int j = 0; j<4; j++) {
+		for (unsigned int i = 0; i < 4; i++) {
+			if (mas[i][j] == 0) {
+				for (int k = i + 1; k < 4; k++) {
+					if (mas[k][j] != 0) {
+						mas[i][j] = mas[k][j];
+						mas[k][j] = 0;
+						break;
+					}
+				}
+			}
+		}
+	}
+	return true;
+}
+
+bool sdvig_vlevo(unsigned int mas[4][4], unsigned int &score) {
+	unsigned int sdvig = 0;
+	for (unsigned int i = 0; i < 4; i++) {
+		for (unsigned int j = 0; j < 3; j++) {
+			if (mas[i][j] == 0) {
+				for (int k = j + 1; k <= 3; k++) {
+					if (mas[i][k] != 0) {
+						mas[i][j] = mas[i][k];
+						mas[i][k] = 0;
+						sdvig++;
+						break;
+					}
+				}
+			}
+		}
+	}
+
+	for (unsigned int i = 0; i<4; i++) {
+		for (unsigned int j = 0; j < 3; j++) {
+			if (mas[i][j] == mas[i][j + 1] && mas[i][j] != 0) {
+				score += mas[i][j];
+				mas[i][j] *= 2;
+				mas[i][j + 1] = 0;
+				sdvig++;
+			}
+		}
+	}
+	if (sdvig == 0) {
+		return false;
+	}
+	for (unsigned int i = 0; i < 4; i++) {
+		for (unsigned int j = 0; j < 3; j++) {
+			if (mas[i][j] == 0) {
+				for (int k = j + 1; k <= 3; k++) {
+					if (mas[i][k] != 0) {
+						mas[i][j] = mas[i][k];
+						mas[i][k] = 0;
+						break;
+					}
+				}
+			}
+		}
+	}
+}
+
+bool sdvig_vpravo(unsigned int mas[4][4], unsigned int &score) {
+	unsigned int sdvig = 0;
+	for (unsigned int i = 0; i < 4; i++) {
+		for (unsigned int j = 3; j > 0; j--) {
+			if (mas[i][j] == 0) {
+				for (int k = j - 1; k >= 0; k--) {
+					if (mas[i][k] != 0) {
+						mas[i][j] = mas[i][k];
+						mas[i][k] = 0;
+						sdvig++;
+						break;
+					}
+				}
+			}
+		}
+	}
+
+	for (unsigned int i = 0; i < 4; i++) {
+		for (unsigned int j = 3; j > 0; j--) {
+			if (mas[i][j] == mas[i][j - 1] && mas[i][j] != 0) {
+				score += mas[i][j];
+				mas[i][j] *= 2;
+				mas[i][j - 1] = 0;
+				sdvig++;
+			}
+		}
+	}
+	if (sdvig == 0) {
+		return false;
+	}
+	for (unsigned int i = 0; i < 4; i++) {
+		for (unsigned int j = 3; j > 0; j--) {
+			if (mas[i][j] == 0) {
+				for (int k = j - 1; k >= 0; k--) {
+					if (mas[i][k] != 0) {
+						mas[i][j] = mas[i][k];
+						mas[i][k] = 0;
+						break;
+					}
+				}
+			}
+		}
+	}
+	return true;
+}
+bool the_eng_game(unsigned mas[4][4]) {
+
+}
 int main()
 {
-	cout << "To start the game, fill the 4x4 game board." << endl; 
-	cout << "Use numbers that are a multiple of 2, 4..." << endl; 
-	cout << "Numbers are separated by a space.To enter a new line, use enter"<<endl;
-    int matrix[4][4], i=0, j=0, k=0;
-    char op;
-    for(i=0; i<4; ++i){
-        for(j=0; j<4; ++j){
-            cin>>matrix[i][j];
-        }
-    }
-    cout<<endl<<"To shift the field, use the following keys: 'h' to the left, 'l' to the right, 'k' up and 'j' down. Have a good game!"<<endl;
-    for(i=0; i<4; ++i){
-        for(j=0; j<4; ++j){
-            if(matrix[i][j]==0){
-                cout<<"* ";
-            }
-            else{
-                cout<<matrix[i][j]<<" ";
-            }
-        }
-        cout<<endl;
-    }
-    srand(time(NULL));
-    int sum=0;
-    while(true){
-        cin>>op;
-        bool p=0;
-        for(i=0; i<3; ++i){
-            for(j=0; j<3; ++j){
-                if(matrix[i][j]==matrix[i+1][j]||matrix[i][j]==matrix[i][j+1]||matrix[i][j]==0){
-                    p=1;
-                    break;
-                }
-            }
-            if(p){break;}
-        }
-        switch(op){
-            case 'j':
-            {
-            int z=0;
-            for(j=0; j<4; ++j){
-                for(i=3; i>=0; --i){
-                    if(matrix[i][j]!=0){
-                        for(k=i-1; k>=0; --k){
-                            if(matrix[k][j]!=0){
-                                if(matrix[k][j]==matrix[i][j]){
-                                    matrix[i][j]=matrix[i][j]+matrix[k][j];
-                                    matrix[k][j]=0;
-                                    sum+=matrix[i][j];
-                                    z+=1;
-                                }
-                                break;
-                            }
-                        }
-                        while(matrix[i+1][j]==0){
-                            if(i<3){
-                                matrix[i+1][j]=matrix[i][j];
-                                matrix[i][j]=0;
-                                i=i+1;
-                                z+=1;
-                            }
-                            else{break;}
-                        }
-                        i=k+1;
-                    }
-                }
-            }
-            if(z==0){
-                cout<<"Enter another key"<<endl;
-                p=0;
-            }
-            break;
-            }
-            case 'k':
-            {
-            int z=0;
-            for(j=0; j<4; ++j){
-                for(i=0; i<4; ++i){
-                    if(matrix[i][j]!=0){
-                        for(k=i+1; k<4; ++k){
-                            if(matrix[k][j]!=0){
-                                if(matrix[k][j]==matrix[i][j]){
-                                    matrix[i][j]=matrix[i][j]+matrix[k][j];
-                                    matrix[k][j]=0;
-                                    sum+=matrix[i][j];
-                                    z+=1;
-                                }
-                                break;
-                            }
-                        }
-                        while(matrix[i-1][j]==0){
-                            if(i>0){
-                                matrix[i-1][j]=matrix[i][j];
-                                matrix[i][j]=0;
-                                i=i-1;
-                                z+=1;
-                            }
-                            else{break;}
-                        }
-                        i=k-1;
-                    }
-                }
-            }
-            if(z==0){
-                cout<<"Enter another key"<<endl;
-                p=0;
-            }
-            break;
-            }
-            case 'h':
-            {
-            int z=0;
-            for(i=0; i<4; ++i){
-                for(j=0; j<4; ++j){
-                    if(matrix[i][j]!=0){
-                        for(k=j+1; k<4; ++k){
-                            if(matrix[i][k]!=0){
-                                if(matrix[i][k]==matrix[i][j]){
-                                    matrix[i][j]=matrix[i][j]+matrix[i][k];
-                                    matrix[i][k]=0;
-                                    sum+=matrix[i][j];
-                                    z+=1;
-                                }
-                                break;
-                            }
-                        }
-                        while(matrix[i][j-1]==0){
-                            if(j>0){
-                                matrix[i][j-1]=matrix[i][j];
-                                matrix[i][j]=0;
-                                j=j-1;
-                                z+=1;
-                            }
-                            else{break;}
-                        }
-                        j=k-1;
-                    }
-                }
-            }
-            if(z==0){
-                cout<<"Enter another key"<<endl;
-                p=0;
-            }
-            break;
-            }
-            case 'l':
-            {
-            int z=0;
-            for(i=0; i<4; ++i){
-                for(j=3; j>=0; --j){
-                    if(matrix[i][j]!=0){
-                        for(k=j-1; k>=0; --k){
-                            if(matrix[i][k]!=0){
-                                if(matrix[i][k]==matrix[i][j]){
-                                    matrix[i][j]=matrix[i][j]+matrix[i][k];
-                                    matrix[i][k]=0;
-                                    sum+=matrix[i][j];
-                                    z+=1;
-                                }
-                                break;
-                            }
-                        }
-                        while(matrix[i][j+1]==0){
-                            if(j<3){
-                                matrix[i][j+1]=matrix[i][j];
-                                matrix[i][j]=0;
-                                j=j+1;
-                                z+=1;
-                            }
-                            else{break;}
-                        }
-                        j=k+1;
-                    }
-                }
-            }
-            if(z==0){
-                cout<<"Enter another key"<<endl;
-                p=0;
-            }
-            break;
-            }
-            case 'q':
-            {
-            system("pause");
-            cout<<"game over, your score : "<<sum<<endl;
-			return -1;
-            }
-        }
-        if(p){
-            while(1){
-                i=rand()%4;
-                j=rand()%4;
-                if(matrix[i][j]==0){
-                    if(rand()%11<10){
-                        matrix[i][j]=2;
-                    }
-                    else{
-                        matrix[i][j]=4;
-                    }
-                    break;
-                }
-            }
-            for(i=0; i<4; ++i){
-                for(j=0; j<4; ++j){
-                    if(matrix[i][j]==0){
-                        cout<<"* ";
-                    }
-                    else{
-                        cout<<matrix[i][j]<<" ";
-                    }
-                }
-                cout<<endl;
-            }
-        }
-    }
-    cout<<"game over, your score : "<<sum<<endl;
-    return 0;
+	srand(time(NULL));
+	unsigned int mas[4][4] = {  {0, 0, 0, 0},
+								{0, 0, 0, 0},
+								{0, 0, 0, 0}, 
+								{0, 0, 0, 0}};
+	int exit=0;
+	unsigned int score = 0;
+	input_mas(mas);
+	output_mas(mas, score);
+	char op;
+	unsigned int ;
+	while (cin >> op) {
+		switch (op) {
+		case 'j': {
+			if (sdvig_vniz(mas, score)) {
+				dobavlenie_chisla(mas);
+				output_mas(mas, score);
+			}
+			else {
+				cout << endl;
+				cout << "Make another move" << endl;
+			}
+			break;
+		}
+		case 'k': {
+			if (sdvig_vverh(mas, score)) {
+				dobavlenie_chisla(mas);
+				output_mas(mas, score);
+			}
+			else {
+				cout << endl;
+				cout << "Make another move" << endl;
+			}
+			break;
+		}
+		case 'h': {
+			if (sdvig_vlevo(mas, score)) {
+				dobavlenie_chisla(mas);
+				output_mas(mas, score);
+			}
+			else {
+				cout << endl;
+				cout << "Make another move" << endl;
+			}
+			break;
+		}
+		case 'l': {
+			if (sdvig_vpravo(mas, score)) {
+				dobavlenie_chisla(mas);
+				output_mas(mas, score);
+			}
+			else {
+				cout << endl;
+				cout << "Make another move" << endl;
+			}
+			break;
+		}
+		case 'q': {
+			exit = 1;
+			break;
+		}
+		default: {
+			cout << " Error move" << endl; 
+			break;
+		}
+		}
+		if (exit == 1) {
+			break;
+		}
+	}
+	if (exit == 1) {
+		cout << endl;
+		cout << "Game over" << endl;
+		cout << "Your score: " << score << endl;
+		return -1;
+	}
+return 0;
 }
+
