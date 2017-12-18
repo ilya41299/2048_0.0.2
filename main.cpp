@@ -21,6 +21,7 @@ void input_mas(unsigned int  mas[4][4]) {
 		}
 	}
 }
+
 void dobavlenie_chisla(unsigned int  mas[4][4]) {
 	int k = 0;
 	while (k != 1) {
@@ -38,6 +39,7 @@ void dobavlenie_chisla(unsigned int  mas[4][4]) {
 		}
 	}
 }
+
 void output_mas(unsigned int mas[4][4], unsigned int score) {
 	cout << endl;
 	for (unsigned int i = 0; i<4; ++i) {
@@ -51,8 +53,7 @@ void output_mas(unsigned int mas[4][4], unsigned int score) {
 		}
 		cout << endl;
 	}
-	cout << endl;
-	cout << "Score: " << score << endl;
+	cout << endl << "Score: " << score << endl;
 }
 
 bool sdvig_vniz(unsigned int mas[4][4], unsigned int &score) {
@@ -99,10 +100,7 @@ bool sdvig_vniz(unsigned int mas[4][4], unsigned int &score) {
 	}
 	return true;
 }
-
 	
-
-
 bool sdvig_vverh(unsigned int mas[4][4], unsigned int &score) {
 	unsigned int sdvig = 0; 
 	for (unsigned int j = 0; j < 4; j++) {
@@ -164,7 +162,6 @@ bool sdvig_vlevo(unsigned int mas[4][4], unsigned int &score) {
 			}
 		}
 	}
-
 	for (unsigned int i = 0; i<4; i++) {
 		for (unsigned int j = 0; j < 3; j++) {
 			if (mas[i][j] == mas[i][j + 1] && mas[i][j] != 0) {
@@ -209,7 +206,6 @@ bool sdvig_vpravo(unsigned int mas[4][4], unsigned int &score) {
 			}
 		}
 	}
-
 	for (unsigned int i = 0; i < 4; i++) {
 		for (unsigned int j = 3; j > 0; j--) {
 			if (mas[i][j] == mas[i][j - 1] && mas[i][j] != 0) {
@@ -238,9 +234,26 @@ bool sdvig_vpravo(unsigned int mas[4][4], unsigned int &score) {
 	}
 	return true;
 }
-bool the_eng_game(unsigned mas[4][4]) {
 
+bool proverka_move(unsigned int mas[4][4])
+{
+	for (unsigned int i = 0; i<4; i++) {
+		for (unsigned int j = 0; j<4; j++){
+			if (i != 3) {
+				if (mas[i][j] == mas[i + 1][j] || mas[i][j] == 0) {
+					return true;
+				}
+			}
+			if (j != 3) {
+				if (mas[i][j] == mas[i][j + 1] || mas[i][j] == 0) {
+					return true;
+				}
+			}
+		}
+	}
+	return false;
 }
+
 int main()
 {
 	srand(time(NULL));
@@ -253,72 +266,72 @@ int main()
 	input_mas(mas);
 	output_mas(mas, score);
 	char op;
-	unsigned int ;
-	while (cin >> op) {
+	while ((cin >> op) && (proverka_move(mas))) {
 		switch (op) {
-		case 'j': {
-			if (sdvig_vniz(mas, score)) {
-				dobavlenie_chisla(mas);
-				output_mas(mas, score);
+			case 'j': {
+				if (sdvig_vniz(mas, score)) {
+					dobavlenie_chisla(mas);
+					output_mas(mas, score);
+				}
+				else {
+					cout << endl;
+					cout << "Make another move" << endl;
+				}
+				break;
 			}
-			else {
-				cout << endl;
+			case 'k': {
+				if (sdvig_vverh(mas, score)) {
+					dobavlenie_chisla(mas);
+					output_mas(mas, score);
+				}
+				else {
+					cout << endl;
+					cout << "Make another move" << endl;
+				}
+				break;
+			}
+			case 'h': {
+				if (sdvig_vlevo(mas, score)) {
+					dobavlenie_chisla(mas);
+					output_mas(mas, score);
+				}
+				else {
+					cout << endl;
+					cout << "Make another move" << endl;
+				}
+				break;
+			}
+			case 'l': {
+				if (sdvig_vpravo(mas, score)) {
+					dobavlenie_chisla(mas);
+					output_mas(mas, score);
+				}
+				else {
+					cout << endl;
+					cout << "Make another move" << endl;
+				}
+				break;
+			}
+			case 'q': {
+				exit = 1;
+				break;
+			}
+			default: {
 				cout << "Make another move" << endl;
+				break;
 			}
-			break;
-		}
-		case 'k': {
-			if (sdvig_vverh(mas, score)) {
-				dobavlenie_chisla(mas);
-				output_mas(mas, score);
 			}
-			else {
-				cout << endl;
-				cout << "Make another move" << endl;
+			if (exit == 1) {
+				break;
 			}
-			break;
 		}
-		case 'h': {
-			if (sdvig_vlevo(mas, score)) {
-				dobavlenie_chisla(mas);
-				output_mas(mas, score);
-			}
-			else {
-				cout << endl;
-				cout << "Make another move" << endl;
-			}
-			break;
-		}
-		case 'l': {
-			if (sdvig_vpravo(mas, score)) {
-				dobavlenie_chisla(mas);
-				output_mas(mas, score);
-			}
-			else {
-				cout << endl;
-				cout << "Make another move" << endl;
-			}
-			break;
-		}
-		case 'q': {
-			exit = 1;
-			break;
-		}
-		default: {
-			cout << " Error move" << endl; 
-			break;
-		}
-		}
-		if (exit == 1) {
-			break;
-		}
-	}
-	if (exit == 1) {
-		cout << endl;
-		cout << "Game over" << endl;
-		cout << "Your score: " << score << endl;
+	if (!(proverka_move(mas))) {
+		cout << endl << "Game over" << endl << "Your score: " << score << endl;
 		return -1;
 	}
-return 0;
+	if (exit == 1) {
+		cout << endl<< "Game over" << endl << "Your score: " << score << endl;
+		return -1;
+	}
+	return 0;
 }
-
